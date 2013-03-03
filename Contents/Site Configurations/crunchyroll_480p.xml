@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<site site="http://www.crunchyroll.com/swf/.*p480=1" 
+plugin="http://www.crunchyroll.com/swf/vidplayer.swf.*"
+initialState="wait-for-frame-load"
+version="2.0"
+identifier="com.plexapp.plugins.Crunchyroll"
+manualLock="true"
+windowHeight="512" 
+windowWidth="865"> 
+	<crop x="6" y="0" width="853" height="-32"/>
+
+	<seekbar type="thumb">
+		<start x="82" y="-15"/>
+		<end x="597" y="-15"/>
+		<played>
+			<color rgb="ffffff"/>
+		</played>
+	</seekbar>
+
+	<condition name="logged-in">
+		<and>
+			<or>
+				<javascript script="login = document.cookie.match('User%20Type=premium') == 'User%20Type=premium' ? 1 : 0" matches="1" />
+				<javascript script="login = document.cookie.match('User%20Type=freetrial') == 'User%20Type=freetrial' ? 1 : 0" matches="1" />
+			</or>
+		</and>
+	</condition>
+	
+	<state name="wait-for-frame-load">
+        <event>
+            <condition>
+                <frameLoaded />
+            </condition>
+            <action>
+				<goto state="check-for-auth" />
+            </action>
+        </event>
+    </state>
+
+	<state name="check-for-auth">
+        <event>
+            <condition>
+				<condition name="logged-in" />
+            </condition>
+            <action>
+				<lockPlugin/>
+    			<goto state="playing" />
+            </action>
+        </event> 
+		<event>
+            <condition>
+				<not>
+					<condition name="logged-in" />
+				</not>
+            </condition>
+            <action>
+				<run script="window.location='https://www.crunchyroll.com/ajax/?req=RpcApiUser_Login&amp;name=${username}&amp;password=${password}'" />
+				<pause time="3000" />
+				<run script="window.location='https://www.crunchyroll.com/acct/?action=status'" />
+				<pause time="7000" />
+				<goto state="check-for-auth-again" />
+            </action>
+        </event>		
+    </state>
+	
+	<state name="check-for-auth-again">
+		<event>
+            <condition>
+				<condition name="logged-in" /> 
+            </condition>
+            <action>
+            	<!-- Until Plex fixes the bug with window sizes on re-directs, we have to do this. Ugly, but the only way.  -->
+    			<goto state="end" param="Login successful! You will need to play the video again" />
+			</action>
+        </event> 
+		<event>
+            <condition>
+				<not>
+					<condition name="logged-in" />
+				</not>
+            </condition>
+            <action>
+				<goto state="end" param="Something went wrong. Please try again" />
+            </action>
+        </event> 
+    </state>
+    
+	<state name="playing">
+		<event>
+			<condition>
+				<command name="pause"/>
+			</condition>
+			<action>
+				<click x="20" y="-15"/>
+				<move x="50" y="50" />
+				<goto state="paused"/>
+			</action>
+		</event>
+		<event>
+			<condition>
+				<color x="22" y="-15" rgb="ffffff"/>
+			</condition>
+			<action>
+				<goto state="paused"/>
+			</action>
+		</event>
+	</state>
+	<state name="waiting">
+		<event>
+			<condition>
+				<or>
+					<color x="22" y="-15" rgb="808080"/>
+					<color x="22" y="-15" rgb="333333"/>
+				</or>
+			</condition>
+			<action>
+				<goto state="playing"/>
+			</action>
+		</event>
+		<event>
+			<condition>
+				<color x="22" y="-15" rgb="ffffff"/>
+			</condition>
+			<action>
+				<goto state="paused"/>
+			</action>
+		</event>	
+	</state>
+	<state name="paused">
+		<event>
+			<condition>
+				<command name="play"/>
+			</condition>
+			<action>
+				<click x="20" y="-15"/>
+				<move x="50" y="500" />
+				<goto state="playing"/>
+			</action>
+		</event>
+		<event>
+			<condition>
+				<or>
+					<color x="22" y="-15" rgb="808080"/>
+					<color x="22" y="-15" rgb="333333"/>
+				</or>
+			</condition>
+			<action>
+				<goto state="playing"/>
+			</action>
+		</event>
+		<event>
+			<condition>
+				<color x="8" y="8" rgb="555555"/>
+			</condition>
+			<action>
+				<goto state="playing" />
+			</action>
+		</event>
+	</state>	
+</site>

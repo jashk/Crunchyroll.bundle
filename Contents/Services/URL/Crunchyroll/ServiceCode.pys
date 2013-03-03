@@ -1,0 +1,94 @@
+import re
+
+####################################################################################################
+def NormalizeURL(url):
+	return url
+	
+####################################################################################################
+def MetadataObjectForURL(url):
+	#Maybe i'll do something later...
+	return
+
+####################################################################################################
+def MediaObjectsForURL(url):
+	MediaObjects = []
+	
+	if Prefs['quality'] == "1080P":
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p1080=1"))],
+				video_resolution = 1080,
+				audio_channels = 2),)
+	elif Prefs['quality'] == "720P":
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p720=1"))],
+				video_resolution = 720,
+				audio_channels = 2),)
+	elif Prefs['quality'] == "480P":
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p480=1"))],
+				video_resolution = 480,
+				audio_channels = 2),)
+	elif Prefs['quality'] == "SD":
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p360=1"))],
+				video_resolution = 360,
+				audio_channels = 2),)
+	else:
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p1080=1"))],
+				video_resolution = 1080,
+				audio_channels = 2),)
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p720=1"))],
+				video_resolution = 720,
+				audio_channels = 2),)
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p480=1"))],
+				video_resolution = 480,
+				audio_channels = 2),)
+		MediaObjects.append(
+			MediaObject(
+				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p360=1"))],
+				video_resolution = 360,
+				audio_channels = 2),)	
+		
+	return MediaObjects
+
+####################################################################################################
+@indirect
+def PlayVideo(url):
+	#Get the URL for the video
+	page = HTTP.Request(url, immediate=True).content
+	
+	#Extract the config URL
+	PATTERN = 'config_url":"(.*?)%26pop_out'
+	try:
+		config_url = re.search(PATTERN, page).group(1)
+	except:
+		config_url = None
+	
+	#Determine the resolution of the video based on the config_url. (E.g. In case the user selected a res that wasn't available) 
+	reslookup = {'10':'p360','20':'p480','30':'p720','60':'p360','61':'p480','62':'p720','80':'p1080'} #This is my best guess as to what the "video_quality" argument translates into. I'm not sure what video_format is or how it might relate
+	RES_PATTERN = 'video_quality%3D(.*?)%26auto'
+	try:
+		quality = re.search(RES_PATTERN, config_url).group(1)	
+	except:
+		quality = 10
+	
+	res = reslookup[quality]
+	
+	#Final video URL
+	if config_url:
+		video_url = "http://www.crunchyroll.com/swf/vidplayer.swf?config_url="+config_url+"&"+res+"=1"
+		Log.Debug("Crunchyroll.bundle ----> Final Video URL is: "+str(video_url))
+		return IndirectResponse(VideoClipObject, key=WebVideoURL(video_url))
+	else:
+		raise Ex.MediaNotAvailable
+	
