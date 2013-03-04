@@ -4,18 +4,18 @@ The Crunchyroll.bundle Plex Media Server plugin provides access to the content
 available at Crunchyroll.com. 
 
 Most content is available to free users in a *low resolution* format that plays 
-*advertisements* throughout the episode. If don't want these ads or would 
+*advertisements* throughout the episode. If you don't want these ads or would 
 like a higher resolution, you will need a premium account. You can start a 
 14-day free trial by visiting http://www.crunchyroll.com/freetrial. 
 
-Lastly, this plugin was coded and designed while using an Anime premium Crunchyroll
+Lastly, this plugin was coded and designed using an Anime premium Crunchyroll
 account. While most things related to Drama seem to work just fine, I have not 
 extensively tested the drama side of this plugin as I have the Anime side. 
 
 Requirements
 ============
 This plugin **requires** a Crunchyroll.com account. You can sign up for free at 
-(http://www.crunchyroll.com). When you get the plugin installed you will need
+http://www.crunchyroll.com. When you get the plugin installed you will need
 to enter your username and password into the preferences section before you will
 be able to use it. 
 
@@ -34,11 +34,13 @@ Installation
 	* Windows XP, Server 2003, or Home Server: C:\Documents and Settings\[Your Username]\Local Settings\Application Data\Plex Media Server\Plug-ins
 	* Mac/Linux: ~/Library/Application Support/Plex Media Server/Plug-ins
 
-	3. Restart PMS
+3. Rename the directory from "Crunchyroll.bundle-master" to "Crunchyroll.bundle"
+
+4. Restart PMS
 
 Known Issues
 ============
-- [ ] When you first start PMS you will get an "error" upon playing your first video. This is a bug in PMS that has not yet been resolved. 
+* When you first start PMS you will get an "error" upon playing your first video. This is a bug in PMS that has not yet been resolved. You shouldn't see the error again unless you restart PMS. 
 
 To-do
 ====
@@ -49,7 +51,7 @@ To-do
 Changes
 =======
 2013-03-03:
-	* Initial Commit
+* Initial Commit
 
 Credits
 =======
