@@ -21,7 +21,5 @@
 			<string>webkit</string>
 		</array>
 	</dict>	
-	<key>PlexPluginDevMode</key>
-	<string>1</string>
 </dict>
 </plist>
