@@ -34,7 +34,7 @@ Installation
 	* Windows XP, Server 2003, or Home Server: C:\Documents and Settings\[Your Username]\Local Settings\Application Data\Plex Media Server\Plug-ins
 	* Mac/Linux: ~/Library/Application Support/Plex Media Server/Plug-ins
 
-3. Rename the directory from "Crunchyroll.bundle-master" to "Crunchyroll.bundle"
+3. Rename the unzipped folder from "Crunchyroll.bundle-master" to "Crunchyroll.bundle"
 
 4. Restart PMS
 
@@ -47,6 +47,7 @@ To-do
 - [ ] Add search functionality
 - [ ] Add "Genres" and "Seasons" filter under Anime and Drama
 - [ ] Change the available_at & free_available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
+- [ ] Switch from Webkit to RTMP to improve quality
 
 Changes
 =======
