@@ -222,6 +222,8 @@ def Channels(title, type):
 	oc.add(DirectoryObject(key=Callback(list_series, title = "Simulcasts", media_type = type, filter = "simulcast", offset = 0), title = "Simulcasts", thumb = R(ICON_LIST)))
 	oc.add(DirectoryObject(key=Callback(list_series, title = "Updated", media_type = type, filter = "updated", offset = 0), title = "Updated", thumb = R(ICON_LIST)))	
 	oc.add(DirectoryObject(key=Callback(list_series, title = "Alphabetical", media_type = type, filter = "alpha", offset = 0), title = "Alphabetical", thumb = R(ICON_LIST)))
+	oc.add(DirectoryObject(key=Callback(list_categories, title = "Genres", media_type = type, filter = "genre"), title = "Genres", thumb = R(ICON_LIST)))
+	oc.add(DirectoryObject(key=Callback(list_categories, title = "Seasons", media_type = type, filter = "season"), title = "Seasons", thumb = R(ICON_LIST)))
 	return oc
 		
 ####################################################################################################	
@@ -256,7 +258,27 @@ def list_series(title, media_type, filter, offset):
 		oc = MessageContainer("Error", request['message'])
 
 	return oc
-	
+
+####################################################################################################	
+@route('/video/crunchyroll/categories')
+def list_categories(title, media_type, filter): 
+	oc = ObjectContainer(title2 = title)
+	options = {'media_type':media_type}
+	request = makeAPIRequest('categories', options)
+	if request['error'] is False:
+		if filter == 'genre':
+			for genre in request['data']['genre']:
+				oc.add(DirectoryObject(key=Callback(list_series, title = genre['label'], media_type = media_type, filter = 'tag:'+genre['tag'], offset = 0), title = genre['label'], thumb = R(ICON_LIST)))
+
+		if filter == 'season':
+			for season in request['data']['season']:
+				oc.add(DirectoryObject(key=Callback(list_series, title = season['label'], media_type = media_type, filter = 'tag:'+season['tag'], offset = 0), title = season['label'], thumb = R(ICON_LIST)))
+				
+	elif request['error'] is True:
+		oc = MessageContainer("Error", request['message'])
+
+	return oc
+
 ####################################################################################################	
 @route('/video/crunchyroll/collections')
 def list_collections(series_id, series_name, thumb, count):

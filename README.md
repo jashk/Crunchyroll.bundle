@@ -36,7 +36,8 @@ Known Issues
 To-do
 ====
 - [ ] Add search functionality
-- [ ] Add "Genres" and "Seasons" filter under Anime and Drama
+- [x] Add "Genres" and "Seasons" filter under Anime and Drama
+- [ ] Add a new primary section called "Pop"
 - [ ] Change the available_at & free_available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
 - [ ] Switch from Webkit to RTMP to improve quality
 
