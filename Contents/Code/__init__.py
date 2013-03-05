@@ -63,7 +63,7 @@ def login():
 		options = {'device_id':device_id, 'device_type':API_DEVICE_TYPE, 'access_token':API_ACCESS_TOKEN, 'version':API_VERSION, 'locale': API_LOCALE}
 		request = JSON.ObjectFromURL(API_URL+"/start_session.0.json", values=options, cacheTime=0, headers=API_HEADERS)
 		if request['error'] is False:
-			Dict['session_id'] = request['data']['session_id'] 	#Insert the session_id into the Dict dict
+			Dict['session_id'] = request['data']['session_id'] 
 			Dict['session_expires'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +4 ))
 			Log("Crunchyroll.bundle ----> New session created! Session ID is: "+ str(Dict['session_id']))
 		elif request['error'] is True:
@@ -90,7 +90,7 @@ def login():
 		Dict.Save()
 		return True
 		
-	#Check to see if a vlid session and auth token exist and if so reinitialize a new session using the auth token. 	
+	#Check to see if a valid session and auth token exist and if so reinitialize a new session using the auth token. 	
 	elif ('session_id' in Dict and 'auth_token' in Dict and current_datetime < Dict['auth_expires'] and current_datetime > Dict['session_expires']):
 		
 		#Re-start new session
@@ -156,7 +156,7 @@ def MainMenu():
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Anime", type = "anime"), title = "Anime", thumb = R(ICON_LIST)))	
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Drama", type = "drama"), title = "Drama", thumb = R(ICON_LIST)))	
 	else: 
-		oc.add(DirectoryObject(key=Callback(FreeTrial), title = "Sign up for free trial", thumb = R(ICON)))	
+		oc.add(DirectoryObject(key=Callback(FreeTrial), title = "Sign up for a 14-day free trial", thumb = R(ICON)))	
 		
 	oc.add(PrefsObject(title = 'Preferences', thumb = R(ICON_PREFS)))
 	return oc
@@ -303,10 +303,10 @@ def list_media_items(request, series_name, season, mode):
 		#The following are items to help display Recently Watched and Queue items correctly
 		season = media['collection']['season'] if mode == "history" else season 
 		series_name = media['series']['name'] if (mode == "history" or mode == "queue") else series_name
-		media = media['media'] if mode == "history" else media  #Because history media is one level deeper in the json string than normal media items. 
-		if mode == "queue" and 'most_likely_media' not in media: #Because some queue items don't have most_likely_media
+		media = media['media'] if mode == "history" else media  #History media is one level deeper in the json string than normal media items. 
+		if mode == "queue" and 'most_likely_media' not in media: #Some queue items don't have most_likely_media so we have to skip them.
 			continue 
-		media = media['most_likely_media'] if mode == "queue" else media  #Because queue media is one level deeper in the json string than normal media items.
+		media = media['most_likely_media'] if mode == "queue" else media  #Queue media is one level deeper in the json string than normal media items.
 		
 		#Dates, times, and such
 		current_datetime = datetime.datetime.now(dateutil.tz.tzutc()) 

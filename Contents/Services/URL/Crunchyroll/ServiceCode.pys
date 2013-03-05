@@ -18,46 +18,86 @@ def MediaObjectsForURL(url):
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p1080=1"))],
 				video_resolution = 1080,
-				audio_channels = 2),)
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)
 	elif Prefs['quality'] == "720P":
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p720=1"))],
 				video_resolution = 720,
-				audio_channels = 2),)
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)
 	elif Prefs['quality'] == "480P":
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p480=1"))],
 				video_resolution = 480,
-				audio_channels = 2),)
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)
 	elif Prefs['quality'] == "SD":
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p360=1"))],
 				video_resolution = 360,
-				audio_channels = 2),)
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)
 	else:
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p1080=1"))],
 				video_resolution = 1080,
-				audio_channels = 2),)
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p720=1"))],
 				video_resolution = 720,
-				audio_channels = 2),)
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p480=1"))],
 				video_resolution = 480,
-				audio_channels = 2),)
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p360=1"))],
 				video_resolution = 360,
-				audio_channels = 2),)	
+				audio_channels = 2,
+				container = Container.MP4,
+				video_codec = VideoCodec.H264,
+				audio_codec = AudioCodec.AAC,
+				aspect_ratio = int(16 / 9),
+				optimized_for_streaming = True),)	
 		
 	return MediaObjects
 
