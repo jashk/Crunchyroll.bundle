@@ -40,6 +40,7 @@ Frequently Asked Questions
 A: Not all content on Crunchyroll has HD quality videos available. This plugin will try to play content at the resolution you select. However, if a particular resolution is not available, it will play the next highest resolution available. You should also know that this plugin will only be able to show you content and resolutions you pay for. If you try to play a drama video at 720P but only pay for an Anime account, you will only be able to watch the 360P resolution video with ads. 
 
 **Q: How do i hide mature content?**
+
 A: You can choose what type of content to show by changing the Mature Content Filter setting found under "Account Settings" > "Video Preferences" of the http://www.crunchyroll.com website. 
 
 To-do
@@ -54,8 +55,11 @@ To-do
 
 Changes
 =======
-v1.0.1:
+v1.1.0:
 * Added more metadata to each video
+* Added Seasons & Genres filter under each of the primary sections
+* Added a Pop section to the main menu
+* Fixed a small bug regarding datetimes for free users
 
 v1.0.0:
 * Initial release
