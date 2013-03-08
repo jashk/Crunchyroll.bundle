@@ -155,6 +155,7 @@ def MainMenu():
 		oc.add(DirectoryObject(key=Callback(History, title = "History", offset = 0), title = "History", thumb = R(ICON_LIST)))
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Anime", type = "anime"), title = "Anime", thumb = R(ICON_LIST)))	
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Drama", type = "drama"), title = "Drama", thumb = R(ICON_LIST)))	
+		oc.add(DirectoryObject(key=Callback(Channels, title = "Pop", type = "pop"), title = "Pop", thumb = R(ICON_LIST)))	
 	else: 
 		oc.add(DirectoryObject(key=Callback(FreeTrial), title = "Sign up for a 14-day free trial", thumb = R(ICON)))	
 		
@@ -322,6 +323,7 @@ def list_media(collection_id, series_name, count, complete, season):
 def list_media_items(request, series_name, season, mode):
 	oc = ObjectContainer(title2 = series_name)
 	for media in request:
+		
 		#The following are items to help display Recently Watched and Queue items correctly
 		season = media['collection']['season'] if mode == "history" else season 
 		series_name = media['series']['name'] if (mode == "history" or mode == "queue") else series_name
@@ -335,7 +337,7 @@ def list_media_items(request, series_name, season, mode):
 		available_datetime = dateutilparser.parse(media['available_time']).astimezone(dateutil.tz.tzlocal()) 
 		available_date = available_datetime.date() 
 		available_at = available_datetime.strftime('%A, %Y-%m-%d at %I:%M %p') 		
-		free_available_datetime = dateutilparser.parse(media['free_available_time']).astimezone(dateutil.tz.tzlocal()) if media['free_available_time'] != '9998-11-30T00:00:00-08:00' else dateutilparser.parse(media['free_available_time']) #Becuase dateutil doesn't like that date and CR uses it for shows never available to free users. 
+		free_available_datetime = dateutilparser.parse(media['free_available_time']).astimezone(dateutil.tz.tzlocal()) if media['free_available_time'].startswith('2') else dateutilparser.parse(media['free_available_time']) #Becuase dateutil doesn't like some of the dates that CR uses for shows that are never available to free users. 
 		free_available_at = free_available_datetime.strftime('%A, %Y-%m-%d at %I:%M %p')
 		
 		#Fix Crunchyroll inconsistencies
@@ -343,6 +345,7 @@ def list_media_items(request, series_name, season, mode):
 		media['episode_number'] = re.sub('\D', '', media['episode_number'])	#Because CR puts letters into some rare episode numbers.
 		name = "Episode "+str(media['episode_number']) if media['name'] == '' else media['name'] #CR doesn't seem to include episode names for all media so we have to make one up. 	
 		season = '1' if season == '0' else season #There is a bug which prevents Season 0 from displaying correctly in PMC. This is to help fix that. Will break if a series has both season 0 and 1. 
+		thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwide_url'] #because not all shows have thumbnails.
 		
 		if media['available'] is False:
 			description = "This episode will be available on "+str(available_at)
@@ -354,7 +357,7 @@ def list_media_items(request, series_name, season, mode):
 				thumb = "http://static.ak.crunchyroll.com/i/coming_soon_beta_fwide.jpg"))
 			
 		elif media['available'] is True:
-			if (media['free_available'] is False and media['media_type'] in Dict['premium_type']) or media['free_available'] is True:					
+			if (media['free_available'] is False and media['media_type'] in Dict['premium_type']) or (media['free_available'] is False and media['media_type'] == 'pop' and Dict['premium_type'] in 'anime|drama') or media['free_available'] is True:					
 
 				oc.add(EpisodeObject(
 					url = media['url'],
@@ -364,7 +367,7 @@ def list_media_items(request, series_name, season, mode):
 					index = int(media['episode_number']),
 					show = media['series_name'],
 					season = int(season),
-					thumb = media['screenshot_image']['fwide_url'],
+					thumb = thumb,
 					duration = int((float(media['duration']) * 1000))))
 					
 			else:
@@ -374,12 +377,13 @@ def list_media_items(request, series_name, season, mode):
 					description = "Only available for "+media['media_type']+" premium users. \r\n \r\n"+str(media['description'])
 				
 				reason = "Only available for "+media['media_type']+" premium users."
+				thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwidestar_url'] #because not all shows have thumbnails.
 				
 				oc.add(DirectoryObject(
 					key = Callback(media_unavailable, reason=reason),
 					title = str(media['episode_number'])+". "+str(name),
 					summary = description.decode('utf-8'),
-					thumb = media['screenshot_image']['fwidestar_url'],
+					thumb = thumb,
 					duration = int((float(media['duration']) * 1000))))
 					
 	return oc

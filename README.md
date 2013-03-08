@@ -33,13 +33,23 @@ Known Issues
 ============
 * When you first start PMS you will get an "error" upon playing your first video. This is a bug in PMS that has not yet been resolved. You shouldn't see the error again unless you restart PMS. 
 
+Frequently Asked Questions
+==========================
+**I selected 1080P or 720P but the video is played in a lower resolution**
+Not all content on Crunchyroll has HD quality videos available. This plugin will try to play content at the resolution you select. However, if a particular resolution is not available, it will play the next highest resolution available. You should also know that this plugin will only be able to show you content and resolutions you pay for. If you try to play a drama video at 720P but only pay for an Anime account, you will only be able to watch the 360P resolution video with ads. 
+
+**How do i hide mature content?"
+You can choose what type of content to show by changing the Mature Content Filter setting found under "Account Settings" > "Video Preferences" of the http://www.crunchyroll.com website. 
+
 To-do
 ====
 - [ ] Add search functionality
 - [x] Add "Genres" and "Seasons" filter under Anime and Drama
-- [ ] Add a new primary section called "Pop"
+- [x] Add a new primary section called "Pop"
 - [ ] Change the available_at & free_available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
 - [ ] Switch from Webkit to RTMP to improve quality
+- [ ] Add support for Simulcast countdowns 
+- [ ] Add resume/restart prefrence
 
 Changes
 =======
