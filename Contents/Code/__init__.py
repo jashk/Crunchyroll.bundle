@@ -268,12 +268,14 @@ def list_categories(title, media_type, filter):
 	request = makeAPIRequest('categories', options)
 	if request['error'] is False:
 		if filter == 'genre':
-			for genre in request['data']['genre']:
-				oc.add(DirectoryObject(key=Callback(list_series, title = genre['label'], media_type = media_type, filter = 'tag:'+genre['tag'], offset = 0), title = genre['label'], thumb = R(ICON_LIST)))
+			if 'genre' in request['data']:
+				for genre in request['data']['genre']:
+					oc.add(DirectoryObject(key=Callback(list_series, title = genre['label'], media_type = media_type, filter = 'tag:'+genre['tag'], offset = 0), title = genre['label'], thumb = R(ICON_LIST)))
 
 		if filter == 'season':
-			for season in request['data']['season']:
-				oc.add(DirectoryObject(key=Callback(list_series, title = season['label'], media_type = media_type, filter = 'tag:'+season['tag'], offset = 0), title = season['label'], thumb = R(ICON_LIST)))
+			if 'season' in request['data']:
+				for season in request['data']['season']:
+					oc.add(DirectoryObject(key=Callback(list_series, title = season['label'], media_type = media_type, filter = 'tag:'+season['tag'], offset = 0), title = season['label'], thumb = R(ICON_LIST)))
 				
 	elif request['error'] is True:
 		oc = MessageContainer("Error", request['message'])
