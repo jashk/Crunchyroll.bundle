@@ -18,14 +18,14 @@ Software Requirements:
 
 Installation
 ============
-1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v1.0.1.zip).
+1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v1.1.0.zip).
 
 2. Unzip the content into the PMS plugins directory under your user account.
 	* Windows 7, Vista, or Server 2008: C:\Users\[Your Username]\AppData\Local\Plex Media Server\Plug-ins
 	* Windows XP, Server 2003, or Home Server: C:\Documents and Settings\[Your Username]\Local Settings\Application Data\Plex Media Server\Plug-ins
 	* Mac/Linux: ~/Library/Application Support/Plex Media Server/Plug-ins
 
-3. Rename the unzipped folder from "Crunchyroll.bundle-v1.x.x" to "Crunchyroll.bundle"
+3. Rename the unzipped folder from "Crunchyroll.bundle-vx.x.x" to "Crunchyroll.bundle"
 
 4. Restart PMS
 
@@ -35,11 +35,12 @@ Known Issues
 
 Frequently Asked Questions
 ==========================
-**I selected 1080P or 720P but the video is played in a lower resolution**
-Not all content on Crunchyroll has HD quality videos available. This plugin will try to play content at the resolution you select. However, if a particular resolution is not available, it will play the next highest resolution available. You should also know that this plugin will only be able to show you content and resolutions you pay for. If you try to play a drama video at 720P but only pay for an Anime account, you will only be able to watch the 360P resolution video with ads. 
+**Q: I selected 1080P or 720P but the video is played in a lower resolution**
 
-**How do i hide mature content?"
-You can choose what type of content to show by changing the Mature Content Filter setting found under "Account Settings" > "Video Preferences" of the http://www.crunchyroll.com website. 
+A: Not all content on Crunchyroll has HD quality videos available. This plugin will try to play content at the resolution you select. However, if a particular resolution is not available, it will play the next highest resolution available. You should also know that this plugin will only be able to show you content and resolutions you pay for. If you try to play a drama video at 720P but only pay for an Anime account, you will only be able to watch the 360P resolution video with ads. 
+
+**Q: How do i hide mature content?**
+A: You can choose what type of content to show by changing the Mature Content Filter setting found under "Account Settings" > "Video Preferences" of the http://www.crunchyroll.com website. 
 
 To-do
 ====
