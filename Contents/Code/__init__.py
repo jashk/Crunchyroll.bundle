@@ -176,7 +176,7 @@ def Queue(title):
 		if request['error'] is False:	
 			return list_media_items(request['data'], 'Queue', '1', 'queue')				
 		elif request['error'] is True:
-			oc = MessageContainer("Error", request['message'])
+			return ObjectContainer(header = 'Error', message = request['message'])
 
 	elif Prefs['queue_type'] == 'Series':
 		fields = "series.name,series.description,series.series_id,series.rating,series.media_count,series.url,series.publisher_name,series.year,series.portrait_image,image.large_url"
@@ -199,8 +199,12 @@ def Queue(title):
 						viewed_episode_count = 0,
 						rating = (float(rating) / 10)))
 			
+			#Check to see if anything was returned
+			if len(oc) == 0:
+				return ObjectContainer(header='No Results', message='No results were found')
+			
 		elif request['error'] is True:
-			oc = MessageContainer("Error", request['message'])
+			return ObjectContainer(header = 'Error', message = request['message'])
 
 	return oc
 
@@ -214,7 +218,7 @@ def History(title, offset):
 	if request['error'] is False:	
 		return list_media_items(request['data'], 'Recently Watched', '1', 'history')	
 	elif request['error'] is True:
-		oc = MessageContainer("Error", request['message'])
+		return ObjectContainer(header = 'Error', message = request['message'])
 
 	return oc
 	
@@ -254,8 +258,12 @@ def Search(query):
 					rating = (float(rating) / 10)))
 		
 	elif request['error'] is True:
-		oc = MessageContainer("Error", request['message'])
-
+		return ObjectContainer(header = 'Error', message = request['message'])
+	
+	#Check to see if anything was returned
+	if len(oc) == 0:
+		return ObjectContainer(header='No Results', message='No results were found')
+	
 	return oc
 	
 ####################################################################################################	
@@ -286,8 +294,12 @@ def list_series(title, media_type, filter, offset):
 			offset = (int(offset) + counter)
 			oc.add(DirectoryObject(key = Callback(list_series, title = title, media_type = media_type, filter = filter, offset = offset), title = "Next...", thumb = R(ICON_NEXT)))
 		
+		#Check to see if anything was returned
+		if len(oc) == 0:
+			return ObjectContainer(header='No Results', message='No results were found')
+		
 	elif request['error'] is True:
-		oc = MessageContainer("Error", request['message'])
+		return ObjectContainer(header = 'Error', message = request['message'])
 
 	return oc
 
@@ -308,8 +320,12 @@ def list_categories(title, media_type, filter):
 				for season in request['data']['season']:
 					oc.add(DirectoryObject(key=Callback(list_series, title = season['label'], media_type = media_type, filter = 'tag:'+season['tag'], offset = 0), title = season['label'], thumb = R(ICON_LIST)))
 				
+		#Check to see if anything was returned
+		if len(oc) == 0:
+			return ObjectContainer(header='No Results', message='No results were found')
+	
 	elif request['error'] is True:
-		oc = MessageContainer("Error", request['message'])
+		return ObjectContainer(header = 'Error', message = request['message'])
 
 	return oc
 
@@ -333,9 +349,13 @@ def list_collections(series_id, series_name, thumb, count):
 					summary = collection['description'],
 					show = str(series_name),
 					thumb = thumb))
+				
+				#Check to see if anything was returned
+				if len(oc) == 0:
+					return ObjectContainer(header='No Results', message='No results were found')
 			
 	elif request['error'] is True:
-		oc = MessageContainer("Error", request['message'])
+		return ObjectContainer(header = 'Error', message = request['message'])
 
 	return oc
 ####################################################################################################
@@ -349,7 +369,7 @@ def list_media(collection_id, series_name, count, complete, season):
 	if request['error'] is False:	
 		return list_media_items(request['data'], series_name, season, 'normal')
 	elif request['error'] is True:
-		oc = MessageContainer("Error", request['message'])
+		return ObjectContainer(header = 'Error', message = request['message'])
 	return oc
 
 ####################################################################################################
@@ -419,13 +439,16 @@ def list_media_items(request, series_name, season, mode):
 					thumb = thumb,
 					duration = int((float(media['duration']) * 1000))))
 					
+	#Check to see if anything was returned
+	if len(oc) == 0:
+		return ObjectContainer(header='No Results', message='No results were found')
+	
 	return oc
 	
 ####################################################################################################
 @route('/video/crunchyroll/media_unavailable')
 def media_unavailable(reason):
-	oc = MessageContainer("Unavailable", reason)
-	return oc
+	return ObjectContainer(header = 'Unavailable', message = reason)
 
 ####################################################################################################
 @route('/video/crunchyroll/freetrial')
