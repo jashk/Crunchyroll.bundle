@@ -9,8 +9,10 @@ dateutilparser = dateutil.parser() #Because i have no idea why i can't call date
 TITLE = 'Crunchyroll'
 ART = 'art-default.png'
 ICON = 'icon-default.png'
+ICON_QUEUE = 'icon-queue.png'
 ICON_LIST = 'icon-list.png'
 ICON_PREFS = 'icon-prefs.png'
+ICON_SEARCH = 'icon-search.png'
 ICON_NEXT = 'icon_next.png'
 
 API_URL = "https://api.crunchyroll.com"
@@ -151,11 +153,12 @@ def MainMenu():
 	oc = ObjectContainer(no_cache = True)
 	
 	if loginResult is True:
-		oc.add(DirectoryObject(key=Callback(Queue, title = "My Queue"), title = "My Queue", thumb = R(ICON_LIST)))
-		oc.add(DirectoryObject(key=Callback(History, title = "History", offset = 0), title = "History", thumb = R(ICON_LIST)))
+		oc.add(DirectoryObject(key=Callback(Queue, title = "My Queue"), title = "My Queue", thumb = R(ICON_QUEUE)))
+		oc.add(DirectoryObject(key=Callback(History, title = "History", offset = 0), title = "History", thumb = R(ICON_QUEUE)))
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Anime", type = "anime"), title = "Anime", thumb = R(ICON_LIST)))	
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Drama", type = "drama"), title = "Drama", thumb = R(ICON_LIST)))	
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Pop", type = "pop"), title = "Pop", thumb = R(ICON_LIST)))	
+		oc.add(InputDirectoryObject(key=Callback(Search), title = "Search", prompt = "Anime series, drama, etc", thumb = R(ICON_SEARCH)))	
 	else: 
 		oc.add(DirectoryObject(key=Callback(FreeTrial), title = "Sign up for a 14-day free trial", thumb = R(ICON)))	
 		
@@ -226,7 +229,35 @@ def Channels(title, type):
 	oc.add(DirectoryObject(key=Callback(list_categories, title = "Genres", media_type = type, filter = "genre"), title = "Genres", thumb = R(ICON_LIST)))
 	oc.add(DirectoryObject(key=Callback(list_categories, title = "Seasons", media_type = type, filter = "season"), title = "Seasons", thumb = R(ICON_LIST)))
 	return oc
+
+####################################################################################################	
+@route('/video/crunchyroll/search')
+def Search(query): 
+	oc = ObjectContainer(title2 = 'Search')
+	fields = "series.name,series.description,series.series_id,series.rating,series.media_count,series.url,series.publisher_name,series.year,series.portrait_image,image.large_url"
+	options = {'media_types':'anime|drama|pop', 'classes':'series', 'fields':fields, 'limit':'64', 'q':query}
+	request = makeAPIRequest('search', options)
+	if request['error'] is False:
+		for series in request['data']:
+			thumb = '' if (series['portrait_image'] is None or series['portrait_image']['large_url'] is None or 'portrait_image' not in series or 'large_url' not in series['portrait_image']) else series['portrait_image']['large_url'] #Becuase not all series have a thumbnail. 
+			rating = '0' if (series['rating'] == '' or 'rating' not in series) else series['rating'] #Because Crunchyroll seems to like passing series without ratings
+			if ('media_count' in series and 'series_id' in series and 'name' in series and series['media_count'] > 0): #Because Crunchyroll seems to like passing series without these things
+				oc.add(TVShowObject(
+					key = Callback(list_collections, series_id = series['series_id'], series_name = series['name'], thumb = thumb, count = series['media_count']), 
+					rating_key = series['url'],
+					title = series['name'],
+					summary = series['description'],
+					studio = series['publisher_name'],
+					thumb = thumb,
+					episode_count = int(series['media_count']), 
+					viewed_episode_count = 0,
+					rating = (float(rating) / 10)))
 		
+	elif request['error'] is True:
+		oc = MessageContainer("Error", request['message'])
+
+	return oc
+	
 ####################################################################################################	
 @route('/video/crunchyroll/series')
 def list_series(title, media_type, filter, offset): 
