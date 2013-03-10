@@ -45,13 +45,10 @@ A: You can choose what type of content to show by changing the Mature Content Fi
 
 To-do
 ====
-- [x] Add search functionality
-- [x] Add "Genres" and "Seasons" filter under Anime and Drama
-- [x] Add a new primary section called "Pop"
 - [ ] Change the available_at & free_available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
 - [ ] Switch from Webkit to RTMP to improve quality
 - [ ] Add support for Simulcast countdowns 
-- [ ] Add resume/restart prefrence
+- [ ] Fix site configs so that plex playback ends when the episode ends
 
 Changes
 =======
