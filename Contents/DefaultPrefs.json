@@ -16,7 +16,7 @@
 	{
 		"id": "quality",
 		"type": "enum",
-		"label": "Quality",
+		"label": "Video Quality",
 		"values": ["SD", "480P", "720P", "1080P", "Ask"],
 		"default": "Ask"
 	},
