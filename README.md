@@ -45,7 +45,7 @@ A: You can choose what type of content to show by changing the Mature Content Fi
 
 To-do
 ====
-- [ ] Add search functionality
+- [x] Add search functionality
 - [x] Add "Genres" and "Seasons" filter under Anime and Drama
 - [x] Add a new primary section called "Pop"
 - [ ] Change the available_at & free_available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
@@ -55,6 +55,11 @@ To-do
 
 Changes
 =======
+v1.2.0:
+* Added search functionality
+* Added null/zero result return handling
+* Updated the icon for the My Queue and History sections
+
 v1.1.0:
 * Added more metadata to each video
 * Added Seasons & Genres filter under each of the primary sections
