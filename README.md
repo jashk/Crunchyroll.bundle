@@ -56,6 +56,7 @@ v1.2.0:
 * Added search functionality
 * Added null/zero result return handling
 * Updated the icon for the My Queue and History sections
+* Updated the preferences file label for quality to Video Quality for clarity
 
 v1.1.0:
 * Added more metadata to each video
