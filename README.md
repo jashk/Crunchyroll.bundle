@@ -18,7 +18,7 @@ Software Requirements:
 
 Installation
 ============
-1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v1.1.0.zip).
+1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v1.2.0.zip).
 
 2. Unzip the content into the PMS plugins directory under your user account.
 	* Windows 7, Vista, or Server 2008: C:\Users\[Your Username]\AppData\Local\Plex Media Server\Plug-ins
