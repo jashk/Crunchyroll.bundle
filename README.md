@@ -53,7 +53,7 @@ To-do
 Changes
 =======
 v1.2.1:
-*Aspect ratio and video frame reate attributes are now displayed properly
+* Aspect ratio and video frame reate attributes are now displayed properly
 
 v1.2.0:
 * Added search functionality
