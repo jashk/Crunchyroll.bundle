@@ -22,9 +22,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)
+				video_frame_rate = '24p'),)
 	elif Prefs['quality'] == "720P":
 		MediaObjects.append(
 			MediaObject(
@@ -34,9 +34,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)
+				video_frame_rate = '24p'),)
 	elif Prefs['quality'] == "480P":
 		MediaObjects.append(
 			MediaObject(
@@ -46,9 +46,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)
+				video_frame_rate = '24p'),)
 	elif Prefs['quality'] == "SD":
 		MediaObjects.append(
 			MediaObject(
@@ -58,9 +58,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)
+				video_frame_rate = '24p'),)
 	else:
 		MediaObjects.append(
 			MediaObject(
@@ -70,9 +70,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)
+				video_frame_rate = '24p'),)
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p720=1"))],
@@ -81,9 +81,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)
+				video_frame_rate = '24p'),)
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p480=1"))],
@@ -92,9 +92,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)
+				video_frame_rate = '24p'),)
 		MediaObjects.append(
 			MediaObject(
 				parts = [PartObject(key=Callback(PlayVideo, url=url+"?p360=1"))],
@@ -103,9 +103,9 @@ def MediaObjectsForURL(url):
 				container = Container.MP4,
 				video_codec = VideoCodec.H264,
 				audio_codec = AudioCodec.AAC,
-				aspect_ratio = int(16 / 9),
+				aspect_ratio = str(1.78),
 				optimized_for_streaming = True,
-				video_frame_rate = int(24)),)	
+				video_frame_rate = '24p'),)	
 		
 	return MediaObjects
 
