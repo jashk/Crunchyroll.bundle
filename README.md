@@ -18,7 +18,7 @@ Software Requirements:
 
 Installation
 ============
-1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v1.2.0.zip).
+1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v1.2.1.zip).
 
 2. Unzip the content into the PMS plugins directory under your user account.
 	* Windows 7, Vista, or Server 2008: C:\Users\[Your Username]\AppData\Local\Plex Media Server\Plug-ins
@@ -52,6 +52,9 @@ To-do
 
 Changes
 =======
+v1.2.1:
+*Aspect ratio and video frame reate attributes are now displayed properly
+
 v1.2.0:
 * Added search functionality
 * Added null/zero result return handling
