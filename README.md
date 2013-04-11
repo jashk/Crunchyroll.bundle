@@ -13,7 +13,7 @@ This plugin **requires** a Crunchyroll.com account. You can sign up for free at 
 Software Requirements:
 
 * Plex Media Server (PMS) version 0.9.7.12 or later (http://www.plexapp.com/getplex/)
-	* Tested on Windows & Mac only. May work with Linux. 
+	* Tested on Windows & Mac only. Does not work with Linux or NAS version of PMS.
 * Flash for "Other Browsers" (http://get.adobe.com/flashplayer/otherversions)
 
 Installation
