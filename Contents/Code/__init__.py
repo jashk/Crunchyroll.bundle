@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import random, re, string
-import webbrowser
 import dateutil.tz, dateutil.relativedelta, dateutil.parser
 import datetime
 
@@ -159,12 +158,10 @@ def MainMenu():
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Drama", type = "drama"), title = "Drama", thumb = R(ICON_LIST)))	
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Pop", type = "pop"), title = "Pop", thumb = R(ICON_LIST)))	
 		oc.add(InputDirectoryObject(key=Callback(Search), title = "Search", prompt = "Anime series, drama, etc", thumb = R(ICON_SEARCH)))	
-	else: 
-		oc.add(DirectoryObject(key=Callback(FreeTrial), title = "Sign up for a 14-day free trial", thumb = R(ICON)))	
-		
+
 	oc.add(PrefsObject(title = 'Preferences', thumb = R(ICON_PREFS)))
 	return oc
-	
+
 ####################################################################################################	
 @route('/video/crunchyroll/queue')
 def Queue(title):
