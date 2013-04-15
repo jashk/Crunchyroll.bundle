@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <site site="http://www.crunchyroll.com/swf/.*p480=1" 
-plugin="http://www.crunchyroll.com/swf/vidplayer.swf.*"
-initialState="wait-for-frame-load"
-version="2.0"
-identifier="com.plexapp.plugins.Crunchyroll"
-manualLock="true"
-windowHeight="512" 
-windowWidth="865"> 
+	plugin="http://www.crunchyroll.com/swf/vidplayer.swf.*"
+	initialState="wait-for-frame-load"
+	version="2.0"
+	identifier="com.plexapp.plugins.crunchyroll"
+	manualLock="true"
+	windowHeight="512"
+	windowWidth="865">
+
 	<crop x="6" y="0" width="853" height="-32"/>
 
 	<seekbar type="thumb">
@@ -25,7 +26,7 @@ windowWidth="865">
 			</or>
 		</and>
 	</condition>
-	
+
 	<state name="wait-for-frame-load">
         <event>
             <condition>
@@ -62,7 +63,7 @@ windowWidth="865">
             </action>
         </event>		
     </state>
-	
+
 	<state name="check-for-auth-again">
 		<event>
             <condition>
@@ -84,7 +85,7 @@ windowWidth="865">
             </action>
         </event> 
     </state>
-    
+
 	<state name="playing">
 		<event>
 			<condition>
@@ -157,4 +158,5 @@ windowWidth="865">
 			</action>
 		</event>
 	</state>	
+
 </site>
