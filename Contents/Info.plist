@@ -3,17 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.plexapp.plugins.Crunchyroll</string>
+	<string>com.plexapp.plugins.crunchyroll</string>
 	<key>PlexFrameworkVersion</key>
 	<string>2</string>
 	<key>PlexPluginClass</key>
 	<string>Content</string>	
 	<key>PlexClientPlatforms</key>
 	<string>*</string>		
-	<key>PlexMediaContainer</key>
-	<array>
-		<string>Flash</string>
-	</array>	
 	<key>PlexClientCapabilities</key>
 	<dict>
 		<key>protocols</key>
