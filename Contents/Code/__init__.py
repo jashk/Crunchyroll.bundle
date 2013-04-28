@@ -121,10 +121,23 @@ def login():
 			Dict.Save()
 			return False
 
-	#If we got to this point that means a session exists and it's still valid, we don't need to do anything. 
+	#If we got to this point that means a session exists and it's still valid, we don't need to do anything.
 	elif ('session_id' in Dict and current_datetime < Dict['session_expires']):
-		Log("Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(Dict['session_id']))
-		return True
+		#Test to make sure the session still works. (Sometimes sessions just stop working. Not sure why. 
+		options = {'media_id':'615485'}
+		request = makeAPIRequest('info', options)
+		if request['error'] is False:	
+			Log("Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(Dict['session_id']))		
+			return True
+		elif request['error'] is True:
+			Log("Crunchyroll.bundle ----> Something in the login process went wrong.")
+			del Dict['session_id']
+			del Dict['auth_expires']
+			del Dict['premium_type']
+			del Dict['auth_token']
+			del Dict['session_expires']
+			Dict.Save()	
+			return False
 	
 	#This is here as a catch all in case something gets messed up along the way. Remove Dict variables so we start a new session next time around. 
 	else:
