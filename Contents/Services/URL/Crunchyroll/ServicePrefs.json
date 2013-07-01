@@ -11,20 +11,16 @@
 		"label": "Password",
 		"default": "",
 		"option": "hidden",
-		"secure":   "true"
-	},
-	{
-		"id": "quality",
-		"type": "enum",
-		"label": "Video Quality",
-		"values": ["SD", "480P", "720P", "1080P", "Ask"],
-		"default": "Ask"
+		"secure": "true"
 	},
 	{
 		"id": "queue_type",
 		"type": "enum",
 		"label": "Queue Type",
-		"values": ["Series", "Episodes"],
+		"values": [
+			"Series",
+			"Episodes"
+		],
 		"default": "Episodes"
-	},
+	}
 ]

@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
 <site site="http://www.crunchyroll.com/swf/.*p1080=1" 
-plugin="http://www.crunchyroll.com/swf/vidplayer.swf.*"
-initialState="wait-for-frame-load"
-version="2.0"
-identifier="com.plexapp.plugins.Crunchyroll"
-manualLock="true"
-windowHeight="1112" 
-windowWidth="1920">
+	plugin="http://www.crunchyroll.com/swf/vidplayer.swf.*"
+	initialState="wait-for-frame-load"
+	version="2.0"
+	identifier="com.plexapp.plugins.crunchyroll"
+	manualLock="true"
+	windowHeight="1112"
+	windowWidth="1920">
+
 	<crop x="0" y="0" width="0" height="-32"/>
-	
+
 	<seekbar type="thumb">
 		<start x="81" y="-15"/>
 		<end x="1652" y="-15"/>
@@ -25,7 +26,7 @@ windowWidth="1920">
 			</or>
 		</and>
 	</condition>
-		
+
 	<state name="wait-for-frame-load">
         <event>
             <condition>
@@ -62,7 +63,7 @@ windowWidth="1920">
             </action>
         </event>		
     </state>
-	
+
 	<state name="check-for-auth-again">
 		<event>
             <condition>
@@ -71,7 +72,6 @@ windowWidth="1920">
             <action>
             	<!-- Until Plex fixes the bug with window sizes on re-directs, we have to do this. Ugly, but the only way.  -->
     			<goto state="end" param="Login successful! You will need to play the video again" />
-
             </action>
         </event> 
 		<event>
@@ -85,7 +85,7 @@ windowWidth="1920">
             </action>
         </event> 
     </state>
-    
+
 	<state name="playing">
 		<event>
 			<condition>
