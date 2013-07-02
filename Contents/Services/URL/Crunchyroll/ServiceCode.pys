@@ -1,5 +1,9 @@
-RE_PATTERN = Regex('config_url":"(.*?)%26pop_out')
-RE_RES_PATTERN = Regex('video_quality%3D(.*?)%26auto')
+API_URL = "https://api.crunchyroll.com"
+API_HEADERS = {'User-Agent':"Mozilla/5.0 (PLAYSTATION 3; 4.31)", 'Host':"api.crunchyroll.com", 'Accept-Encoding':"gzip, deflate", 'Accept':"*/*", 'Content-Type':"application/x-www-form-urlencoded"}
+API_VERSION = "1.0.1"
+API_LOCALE = "enUS" 
+API_ACCESS_TOKEN = "S7zg3vKx6tRZ0Sf"
+API_DEVICE_TYPE = "com.crunchyroll.ps3"
 
 ####################################################################################################
 def NormalizeURL(url):
@@ -15,10 +19,11 @@ def MediaObjectsForURL(url):
 
 	return [
 		MediaObject(
-			parts = [PartObject(key=Callback(PlayVideo, url=url+"?p1080=1"))],
+			parts = [PartObject(key=Callback(PlayVideo, url=url+"&ultra"))],
 			video_resolution = '1080',
 			audio_channels = 2,
-			container = Container.MP4,
+			protocol = 'hls',
+			container = 'mpegts',
 			video_codec = VideoCodec.H264,
 			audio_codec = AudioCodec.AAC,
 			aspect_ratio = str(1.78),
@@ -26,10 +31,11 @@ def MediaObjectsForURL(url):
 			video_frame_rate = '24p'
 		),
 		MediaObject(
-			parts = [PartObject(key=Callback(PlayVideo, url=url+"?p720=1"))],
+			parts = [PartObject(key=Callback(PlayVideo, url=url+"&high"))],
 			video_resolution = '720',
 			audio_channels = 2,
-			container = Container.MP4,
+			protocol = 'hls',
+			container = 'mpegts',
 			video_codec = VideoCodec.H264,
 			audio_codec = AudioCodec.AAC,
 			aspect_ratio = str(1.78),
@@ -37,10 +43,11 @@ def MediaObjectsForURL(url):
 			video_frame_rate = '24p'
 		),
 		MediaObject(
-			parts = [PartObject(key=Callback(PlayVideo, url=url+"?p480=1"))],
+			parts = [PartObject(key=Callback(PlayVideo, url=url+"&mid"))],
 			video_resolution = '480',
 			audio_channels = 2,
-			container = Container.MP4,
+			protocol = 'hls',
+			container = 'mpegts',
 			video_codec = VideoCodec.H264,
 			audio_codec = AudioCodec.AAC,
 			aspect_ratio = str(1.78),
@@ -48,10 +55,11 @@ def MediaObjectsForURL(url):
 			video_frame_rate = '24p'
 		),
 		MediaObject(
-			parts = [PartObject(key=Callback(PlayVideo, url=url+"?p360=1"))],
+			parts = [PartObject(key=Callback(PlayVideo, url=url+"&low"))],
 			video_resolution = '360',
 			audio_channels = 2,
-			container = Container.MP4,
+			protocol = 'hls',
+			container = 'mpegts',
 			video_codec = VideoCodec.H264,
 			audio_codec = AudioCodec.AAC,
 			aspect_ratio = str(1.78),
@@ -63,29 +71,34 @@ def MediaObjectsForURL(url):
 ####################################################################################################
 @indirect
 def PlayVideo(url):
-	#Get the URL for the video
-	page = HTTP.Request(url).content
-
-	#Extract the config URL
-	try:
-		config_url = RE_PATTERN.search(page).group(1)
-	except:
-		config_url = None
-
-	#Determine the resolution of the video based on the config_url. (E.g. In case the user selected a res that wasn't available) 
-	reslookup = {'0':'NA','10':'p360','20':'p480','30':'p720','60':'p360','61':'p480','62':'p720','80':'p1080'} #This is my best guess as to what the "video_quality" argument translates into. I'm not sure what video_format is or how it might relate
-
-	try:
-		quality = RE_RES_PATTERN.search(config_url).group(1)	
-	except:
-		quality = 10
-
-	res = reslookup[quality]
-
-	#Final video URL
-	if config_url and res != 'NA':
-		video_url = "http://www.crunchyroll.com/swf/vidplayer.swf?config_url="+config_url+"&"+res+"=1"
-		Log.Debug("Crunchyroll.bundle ----> Final Video URL is: "+str(video_url))
-		return IndirectResponse(VideoClipObject, key=WebVideoURL(video_url))
-	else:
+	
+	Log.Debug("Crunchyroll.bundle ----> PlayVideo URL is: "+str(url))
+	
+	#Split the URL to get the session_id & quality
+	session_id = url.split('&')[1]
+	quality = url.split('&')[2]
+	
+	#Remove the Session ID and quality from the URL
+	url = url.split('&')[0]
+	
+	#Split the URL to get the media_id
+	media_id = url.split('-')[-1]
+	
+	#Make the API call 
+	fields = "media.episode_number,media.name,media.description,media.url,media.stream_data"
+	options = {'session_id':session_id, 'version':API_VERSION, 'locale':API_LOCALE, 'media_id':media_id, 'fields':fields} 
+	request = JSON.ObjectFromURL(API_URL+"/info.0.json", values=options, cacheTime=0, headers=API_HEADERS)
+	Log.Debug("Crunchyroll.bundle ----> info request: "+str(request))
+	
+	if request['error'] is False:	
+		if request['data']['stream_data'] is not None:
+			for stream in request['data']['stream_data']['streams']:	
+				if stream['quality'] == quality: 
+					try:
+						return IndirectResponse(VideoClipObject, key=HTTPLiveStreamURL(url=stream['url']))
+					except:
+						raise Ex.MediaNotAvailable
+		else: 
+			raise Ex.MediaNotAvailable
+	else: 
 		raise Ex.MediaNotAvailable

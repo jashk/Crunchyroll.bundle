@@ -409,6 +409,7 @@ def list_media_items(request, series_name, season, mode):
 		name = "Episode "+str(media['episode_number']) if media['name'] == '' else media['name'] #CR doesn't seem to include episode names for all media so we have to make one up. 	
 		season = '1' if season == '0' else season #There is a bug which prevents Season 0 from displaying correctly in PMC. This is to help fix that. Will break if a series has both season 0 and 1. 
 		thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwide_url'] #because not all shows have thumbnails.
+		url = media['url']+str('&')+Dict['session_id']
 		
 		if media['available'] is False:
 			description = "This episode will be available on "+str(available_at)
@@ -423,7 +424,7 @@ def list_media_items(request, series_name, season, mode):
 			if (media['free_available'] is False and media['media_type'] in Dict['premium_type']) or (media['free_available'] is False and media['media_type'] == 'pop' and Dict['premium_type'] in 'anime|drama') or media['free_available'] is True:					
 
 				oc.add(EpisodeObject(
-					url = media['url'],
+					url = url,
 					title = name,
 					summary = media['description'],
 					originally_available_at = available_date,
