@@ -9,6 +9,7 @@
 			<key>URLPatterns</key>
 			<array>
 				<string>^http://www.crunchyroll.com/[^/]+/episode\-\d+\-</string>
+				<string>^http://www.crunchyroll.com/[^/]+/.+pv\-\d+\-</string>
 			</array>
 			<key>TestURLs</key>
 			<array>
