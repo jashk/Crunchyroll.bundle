@@ -90,7 +90,7 @@ def login():
 		
 		#Verify user is premium
 		if Dict['premium_type'] in 'anime|drama':
-			Log("Crunchyroll.bundle ----> User is premium.")
+			Log("Crunchyroll.bundle ----> User is a premium "+str(Dict['premium_type'])+" member.")
 			Dict.Save()
 			return True
 		else:
@@ -114,7 +114,7 @@ def login():
 					
 			#Verify user is premium
 			if Dict['premium_type'] in 'anime|drama':
-				Log("Crunchyroll.bundle ----> User is premium.")
+				Log("Crunchyroll.bundle ----> User is a premium "+str(Dict['premium_type'])+" member.")
 				Dict.Save()
 				return True
 			else:
@@ -134,13 +134,19 @@ def login():
 			return False
 
 	#If we got to this point that means a session exists and it's still valid, we don't need to do anything.
-	elif ('session_id' in Dict and current_datetime < Dict['session_expires']):
+	elif ('session_id' in Dict and current_datetime < Dict['session_expires']):			
 		#Test to make sure the session still works. (Sometimes sessions just stop working. Not sure why. 
 		options = {'media_id':'615485'}
 		request = makeAPIRequest('info', options)
 		if request['error'] is False:	
-			Log("Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(Dict['session_id']))		
-			return True
+			Log("Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(Dict['session_id']))
+			#Verify user is premium
+			if Dict['premium_type'] in 'anime|drama':
+				Log("Crunchyroll.bundle ----> User is a premium "+str(Dict['premium_type'])+" member.")
+				return True
+			else:
+				Log("Crunchyroll.bundle ----> User is not premium. Unable to load plugin.")
+				return False					
 		elif request['error'] is True:
 			Log("Crunchyroll.bundle ----> Something in the login process went wrong.")
 			del Dict['session_id']
