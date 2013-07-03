@@ -9,13 +9,6 @@
 	<key>PlexPluginClass</key>
 	<string>Content</string>	
 	<key>PlexClientPlatforms</key>
-	<string>*</string>		
-	<key>PlexClientCapabilities</key>
-	<dict>
-		<key>protocols</key>
-		<array>
-			<string>webkit</string>
-		</array>
-	</dict>	
+	<string>*</string>
 </dict>
 </plist>

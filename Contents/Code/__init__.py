@@ -82,14 +82,20 @@ def login():
 			if request['error'] is False:
 				Dict['auth_token'] = request['data']['auth'] 
 				Dict['auth_expires'] = dateutilparser.parse(request['data']['expires'])
-				Dict['premium_type'] = request['data']['user']['premium']
+				Dict['premium_type'] = 'free' if request['data']['user']['premium'] == '' else request['data']['user']['premium']
 				Log("Crunchyroll.bundle ----> Login successful.")
 			elif request['error'] is True:
 				Log("Crunchyroll.bundle ----> Error logging in new session. Error message was: "+ str(request['message']))
 				return False				
 		
-		Dict.Save()
-		return True
+		#Verify user is premium
+		if Dict['premium_type'] in 'anime|drama':
+			Log("Crunchyroll.bundle ----> User is a premium "+str(Dict['premium_type'])+" member.")
+			Dict.Save()
+			return True
+		else:
+			Log("Crunchyroll.bundle ----> User is not premium. Unable to load plugin.")
+			return False
 		
 	#Check to see if a valid session and auth token exist and if so reinitialize a new session using the auth token. 	
 	elif ('session_id' in Dict and 'auth_token' in Dict and current_datetime < Dict['auth_expires'] and current_datetime > Dict['session_expires']):
@@ -101,13 +107,20 @@ def login():
 		if request['error'] is False:
 			Dict['session_id'] = request['data']['session_id'] 
 			Dict['auth_expires'] = dateutilparser.parse(request['data']['expires']) 
-			Dict['premium_type'] = request['data']['user']['premium'] 
+			Dict['premium_type'] = 'free' if request['data']['user']['premium'] == '' else request['data']['user']['premium']
 			Dict['auth_token'] = request['data']['auth'] 
 			Dict['session_expires'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +4 )) #4 hours is a guess. Might be +/- 4. 
 			Log("Crunchyroll.bundle ----> Session restart successful. New session_id is: "+ str(Dict['session_id']))
 					
-			Dict.Save()	
-			return True
+			#Verify user is premium
+			if Dict['premium_type'] in 'anime|drama':
+				Log("Crunchyroll.bundle ----> User is a premium "+str(Dict['premium_type'])+" member.")
+				Dict.Save()
+				return True
+			else:
+				Log("Crunchyroll.bundle ----> User is not premium. Unable to load plugin.")
+				return False
+				
 		elif request['error'] is True:
 			#Remove Dict variables so we start a new session next time around. 
 			del Dict['session_id']
@@ -121,13 +134,19 @@ def login():
 			return False
 
 	#If we got to this point that means a session exists and it's still valid, we don't need to do anything.
-	elif ('session_id' in Dict and current_datetime < Dict['session_expires']):
+	elif ('session_id' in Dict and current_datetime < Dict['session_expires']):			
 		#Test to make sure the session still works. (Sometimes sessions just stop working. Not sure why. 
 		options = {'media_id':'615485'}
 		request = makeAPIRequest('info', options)
 		if request['error'] is False:	
-			Log("Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(Dict['session_id']))		
-			return True
+			Log("Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(Dict['session_id']))
+			#Verify user is premium
+			if Dict['premium_type'] in 'anime|drama':
+				Log("Crunchyroll.bundle ----> User is a premium "+str(Dict['premium_type'])+" member.")
+				return True
+			else:
+				Log("Crunchyroll.bundle ----> User is not premium. Unable to load plugin.")
+				return False					
 		elif request['error'] is True:
 			Log("Crunchyroll.bundle ----> Something in the login process went wrong.")
 			del Dict['session_id']
@@ -167,8 +186,10 @@ def MainMenu():
 	if loginResult is True:
 		oc.add(DirectoryObject(key=Callback(Queue, title = "My Queue"), title = "My Queue", thumb = R(ICON_QUEUE)))
 		oc.add(DirectoryObject(key=Callback(History, title = "History", offset = 0), title = "History", thumb = R(ICON_QUEUE)))
-		oc.add(DirectoryObject(key=Callback(Channels, title = "Anime", type = "anime"), title = "Anime", thumb = R(ICON_LIST)))	
-		oc.add(DirectoryObject(key=Callback(Channels, title = "Drama", type = "drama"), title = "Drama", thumb = R(ICON_LIST)))	
+		if 'anime' in Dict['premium_type']:
+			oc.add(DirectoryObject(key=Callback(Channels, title = "Anime", type = "anime"), title = "Anime", thumb = R(ICON_LIST)))	
+		if 'drama' in Dict['premium_type']:
+			oc.add(DirectoryObject(key=Callback(Channels, title = "Drama", type = "drama"), title = "Drama", thumb = R(ICON_LIST)))	
 		oc.add(DirectoryObject(key=Callback(Channels, title = "Pop", type = "pop"), title = "Pop", thumb = R(ICON_LIST)))	
 		oc.add(InputDirectoryObject(key=Callback(Search), title = "Search", prompt = "Anime series, drama, etc", thumb = R(ICON_SEARCH)))	
 
@@ -400,8 +421,6 @@ def list_media_items(request, series_name, season, mode):
 		available_datetime = dateutilparser.parse(media['available_time']).astimezone(dateutil.tz.tzlocal()) 
 		available_date = available_datetime.date() 
 		available_at = available_datetime.strftime('%A, %Y-%m-%d at %I:%M %p') 		
-		free_available_datetime = dateutilparser.parse(media['free_available_time']).astimezone(dateutil.tz.tzlocal()) if media['free_available_time'].startswith('2') else dateutilparser.parse(media['free_available_time']) #Becuase dateutil doesn't like some of the dates that CR uses for shows that are never available to free users. 
-		free_available_at = free_available_datetime.strftime('%A, %Y-%m-%d at %I:%M %p')
 		
 		#Fix Crunchyroll inconsistencies
 		media['episode_number'] = '0' if media['episode_number'] == '' else media['episode_number'] #PV episodes have no episode number so we set it to 0. 
@@ -409,6 +428,7 @@ def list_media_items(request, series_name, season, mode):
 		name = "Episode "+str(media['episode_number']) if media['name'] == '' else media['name'] #CR doesn't seem to include episode names for all media so we have to make one up. 	
 		season = '1' if season == '0' else season #There is a bug which prevents Season 0 from displaying correctly in PMC. This is to help fix that. Will break if a series has both season 0 and 1. 
 		thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwide_url'] #because not all shows have thumbnails.
+		url = media['url']+str('&')+Dict['session_id']
 		
 		if media['available'] is False:
 			description = "This episode will be available on "+str(available_at)
@@ -420,10 +440,10 @@ def list_media_items(request, series_name, season, mode):
 				thumb = "http://static.ak.crunchyroll.com/i/coming_soon_beta_fwide.jpg"))
 			
 		elif media['available'] is True:
-			if (media['free_available'] is False and media['media_type'] in Dict['premium_type']) or (media['free_available'] is False and media['media_type'] == 'pop' and Dict['premium_type'] in 'anime|drama') or media['free_available'] is True:					
+			if media['media_type'] in Dict['premium_type'] or media['media_type'] == 'pop':					
 
 				oc.add(EpisodeObject(
-					url = media['url'],
+					url = url,
 					title = name,
 					summary = media['description'],
 					originally_available_at = available_date,
@@ -434,11 +454,8 @@ def list_media_items(request, series_name, season, mode):
 					duration = int((float(media['duration']) * 1000))))
 					
 			else:
-				if (current_datetime < free_available_datetime and free_available_datetime < (current_datetime + dateutil.relativedelta.relativedelta( days = +365 ))): #The second condition is to keep from showing outrageously far off available dates for media that wont ever be available to free users. 
-					description = "Only available for premium users. It will be available for free users on "+str(free_available_at)+". \r\n \r\n"+str(media['description'])
-				else:
-					description = "Only available for "+media['media_type']+" premium users. \r\n \r\n"+str(media['description'])
 				
+				description = "Only available for "+media['media_type']+" premium users. \r\n \r\n"+str(media['description'])
 				reason = "Only available for "+media['media_type']+" premium users."
 				thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwidestar_url'] #because not all shows have thumbnails.
 				
