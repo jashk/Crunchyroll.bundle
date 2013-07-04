@@ -1,24 +1,27 @@
 About
 =====
-This plugin provides access to the content available at Crunchyroll.com. The plugin has been fully tested on both Windows and Mac. (I haven't tested it on Linux yet) This plugin does require the user to have a crunchyroll.com account, though one can be created for free at http://www.crunchyroll.com. Premium content and higher resolutions are available for premium accounts.
-
-Please note that this plugin was coded and designed using an Anime premium Crunchyroll account. While most things related to Drama seem to work just fine, I have not extensively tested the drama side of this plugin as much as I have the Anime side. 
+This plugin provides access to the Anime and Drama video content available at Crunchyroll.com. This plugin has been fully tested on both Windows and Mac. It has **not** been tested on Linux, Roku, NAS, or any other Plex Media Server/Client platform. This plugin requires the user to have a **premium** crunchyroll.com membership. You can sign up for a free 14-day trial by [clicking here](https://www.crunchyroll.com/freetrial/anime). Free membership accounts will not work. 
 
 While this plugin is considered stable, there will always be bugs. Please submit bugs via the Github issue tracker on this page. I would also love to hear feedback and/or suggestions. 
 
+Version 2
+=========
+Version 2 is a major step towards stability and reliability. Version 1 of this app was based on Webkit and flash video. While this did work, it was not remotely stable or reliable. Version 2 has been redesigned to use HLS streams which are much more stable and reliable. The video quality is also much better. 
+
+The biggest change, however, is that Version 2 no longer supports *free* Crunchyroll accounts. While i regret this, i would like to point out that none of Crunchyroll's official apps (PS3, Xbox, Apple TV, etc) support free accounts either. The main reason is because of the way Crunchyroll encodes their videos. They don't currently have the ability to stream ADs to these platforms. When/if they change this in the future, i will certainly update the app to support free accounts again. 
+
 Requirements
 ============
-This plugin **requires** a Crunchyroll.com account. You can sign up for free at http://www.crunchyroll.com. When you get the plugin installed you will need to enter your username and password into the preferences section before you will be able to use it. 
+This plugin **requires** a **premium** Crunchyroll.com account. You can sign up for free trial by [clicking here](https://www.crunchyroll.com/freetrial/anime). When you get the plugin installed you will need to enter your username and password into the preferences section before you will be able to use it. 
 
 Software Requirements:
 
-* Plex Media Server (PMS) version 0.9.7.12 or later (http://www.plexapp.com/getplex/)
-	* Tested on Windows & Mac only. Does not work with Linux or NAS version of PMS.
-* Flash for "Other Browsers" (http://get.adobe.com/flashplayer/otherversions)
+* Plex Media Server (PMS) version 0.9.7.28 or later (http://www.plexapp.com/getplex/)
+	* Tested on Windows & Mac only. 
 
 Installation
 ============
-1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v1.2.2.zip).
+1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v2.0.0.zip).
 
 2. Unzip the content into the PMS plugins directory under your user account.
 	* Windows 7, Vista, or Server 2008: C:\Users\[Your Username]\AppData\Local\Plex Media Server\Plug-ins
@@ -29,15 +32,12 @@ Installation
 
 4. Restart PMS
 
-Known Issues
-============
-* When you first start PMS you will get an "error" upon playing your first video. This is a bug in PMS that has not yet been resolved. You shouldn't see the error again unless you restart PMS. 
 
 Frequently Asked Questions
 ==========================
 **Q: I selected 1080P or 720P but the video is played in a lower resolution**
 
-A: Not all content on Crunchyroll has HD quality videos available. This plugin will try to play content at the resolution you select. However, if a particular resolution is not available, it will play the next highest resolution available. You should also know that this plugin will only be able to show you content and resolutions you pay for. If you try to play a drama video at 720P but only pay for an Anime account, you will only be able to watch the 360P resolution video with ads. 
+A: Not all content on Crunchyroll has HD quality videos available. This plugin will try to play content at the resolution you select. However, if a particular resolution is not available, it will play the next highest resolution available. 
 
 **Q: How do i hide mature content?**
 
@@ -45,13 +45,17 @@ A: You can choose what type of content to show by changing the Mature Content Fi
 
 To-do
 ====
-- [ ] Change the available_at & free_available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
-- [ ] Switch from Webkit to RTMP to improve quality
+- [ ] Change the available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
 - [ ] Add support for Simulcast countdowns 
-- [ ] Fix site configs so that plex playback ends when the episode ends
 
 Changes
 =======
+v2.0.0:
+* Major release
+* The plugin now uses HLS streams instead of webkit based video
+* Free account support has been removed. The plugin now requires a premium membership. 
+* The plugin will only show you content for which you pay. (E.g. Anime members will not be able to see Drama content.)
+
 v1.2.2:
 * Fixed a bug with the login code that caused problems when trying to resume an invalid session
 
