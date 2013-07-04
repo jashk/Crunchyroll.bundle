@@ -8,9 +8,7 @@
 		<dict>
 			<key>URLPatterns</key>
 			<array>
-				<string>^http://www.crunchyroll.com/[^/]+/episode\-\d+\-</string>
-				<string>^http://www.crunchyroll.com/[^/]+/.+?\-pv\-\d+</string>
-				<string>^http://www.crunchyroll.com/media-\d+/</string>
+				<string>^http://www.crunchyroll.com/[^/]+/.+?\d+</string>
 			</array>
 			<key>TestURLs</key>
 			<array>
