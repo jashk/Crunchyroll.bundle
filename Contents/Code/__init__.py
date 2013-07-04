@@ -15,7 +15,7 @@ ICON_SEARCH = 'icon-search.png'
 ICON_NEXT = 'icon_next.png'
 
 API_URL = "https://api.crunchyroll.com"
-API_HEADERS = {'User-Agent':"Mozilla/5.0 (PLAYSTATION 3; 4.31)", 'Host':"api.crunchyroll.com", 'Accept-Encoding':"gzip, deflate", 'Accept':"*/*", 'Content-Type':"application/x-www-form-urlencoded"}
+API_HEADERS = {'User-Agent':"Mozilla/5.0 (PLAYSTATION 3; 4.46)", 'Host':"api.crunchyroll.com", 'Accept-Encoding':"gzip, deflate", 'Accept':"*/*", 'Content-Type':"application/x-www-form-urlencoded"}
 API_VERSION = "1.0.1"
 API_LOCALE = "enUS" 
 API_ACCESS_TOKEN = "S7zg3vKx6tRZ0Sf"
