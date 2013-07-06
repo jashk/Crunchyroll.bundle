@@ -50,6 +50,9 @@ To-do
 
 Changes
 =======
+v2.0.2:
+* Added background art throughout the plugin.
+
 v2.0.1:
 * Updated the URL service pattern match regex so that it correctly matches URLs being passed by the API.
 
