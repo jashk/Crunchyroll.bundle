@@ -272,7 +272,7 @@ def Channels(title, type):
 def Search(query): 
 	oc = ObjectContainer(title2 = 'Search')
 	fields = "series.name,series.description,series.series_id,series.rating,series.media_count,series.url,series.publisher_name,series.year,series.portrait_image,image.large_url,series.landscape_image,image.full_url"
-	options = {'media_types':'anime|drama|pop', 'classes':'series', 'fields':fields, 'limit':'64', 'q':query}
+	options = {'media_types':Dict['premium_type'], 'classes':'series', 'fields':fields, 'limit':'64', 'q':query}
 	request = makeAPIRequest('search', options)
 	if request['error'] is False:
 		for series in request['data']:

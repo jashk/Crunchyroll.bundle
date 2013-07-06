@@ -52,6 +52,7 @@ Changes
 =======
 v2.0.2:
 * Added background art throughout the plugin.
+* Changed the search function to only return results that match the user's Crunchyroll premium membership type. This will keep users from getting search results for media they can't access.
 
 v2.0.1:
 * Updated the URL service pattern match regex so that it correctly matches URLs being passed by the API.
