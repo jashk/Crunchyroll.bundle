@@ -8,6 +8,8 @@
 	<string>2</string>
 	<key>PlexPluginClass</key>
 	<string>Content</string>	
+	<key>PlexClientPlatformExclusions</key>
+	<string>Firefox,Chrome</string>
 	<key>PlexClientPlatforms</key>
 	<string>*</string>
 </dict>
