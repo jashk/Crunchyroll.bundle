@@ -1,3 +1,9 @@
+import random, re, string
+import dateutil.tz, dateutil.relativedelta, dateutil.parser
+import datetime
+
+dateutilparser = dateutil.parser() #Because i have no idea why i can't call dateutil.parser.parse() directly... 
+
 API_URL = "https://api.crunchyroll.com"
 API_HEADERS = {'User-Agent':"Mozilla/5.0 (PLAYSTATION 3; 4.46)", 'Host':"api.crunchyroll.com", 'Accept-Encoding':"gzip, deflate", 'Accept':"*/*", 'Content-Type':"application/x-www-form-urlencoded"}
 API_VERSION = "1.0.1"
@@ -11,8 +17,46 @@ def NormalizeURL(url):
 
 ####################################################################################################
 def MetadataObjectForURL(url):
-	#Maybe i'll do something later...
-	return
+	
+	#Split the URL to get the session_id
+	session_id = url.split('&')[1]
+	
+	#Remove the Session ID from the URL
+	url = url.split('&')[0]
+	
+	#Split the URL to get the media_id
+	media_id = url.split('-')[-1]
+	
+	#Make the API call 
+	fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available_time,media.duration,media.url,media.screenshot_image,image.fwide_url"
+	options = {'session_id':session_id, 'version':API_VERSION, 'locale':API_LOCALE, 'media_id':media_id, 'fields':fields} 
+	request = JSON.ObjectFromURL(API_URL+"/info.0.json", values=options, cacheTime=0, headers=API_HEADERS)
+	
+	if request['error'] is False:	
+		#Dates, times, and such
+		available_datetime = dateutilparser.parse(request['data']['available_time']).astimezone(dateutil.tz.tzlocal()) 
+		available_date = available_datetime.date() 	
+		
+		#Fix Crunchyroll inconsistencies
+		request['data']['episode_number'] = '0' if request['data']['episode_number'] == '' else request['data']['episode_number'] #PV episodes have no episode number so we set it to 0. 
+		request['data']['episode_number'] = re.sub('\D', '', request['data']['episode_number'])	#Because CR puts letters into some rare episode numbers.
+		name = "Episode "+str(request['data']['episode_number']) if request['data']['name'] == '' else request['data']['name'] #CR doesn't seem to include episode names for all media so we have to make one up. 	
+		thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if request['data']['screenshot_image'] is None else request['data']['screenshot_image']['fwide_url'] #because not all shows have thumbnails.
+		try:
+			return EpisodeObject(
+				url = request['data']['url'],
+				title = name,
+				summary = request['data']['description'],
+				originally_available_at = available_date,
+				index = int(request['data']['episode_number']),
+				show = request['data']['series_name'],
+				thumb = thumb,
+				duration = int((float(request['data']['duration']) * 1000))
+			)
+		except:
+			raise Ex.MediaNotAvailable
+	else: 
+		raise Ex.MediaNotAvailable
 
 ####################################################################################################
 def MediaObjectsForURL(url):
