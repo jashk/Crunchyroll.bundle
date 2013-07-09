@@ -428,68 +428,38 @@ def list_media_items(request, series_name, art, season, mode):
 		available_date = available_datetime.date() 
 		available_at = available_datetime.strftime('%A, %Y-%m-%d at %I:%M %p') 		
 		
-		#Fix Crunchyroll inconsistencies
+		#Fix Crunchyroll inconsistencies & add details for upcoming or unreleased episodes
 		media['episode_number'] = '0' if media['episode_number'] == '' else media['episode_number'] #PV episodes have no episode number so we set it to 0. 
 		media['episode_number'] = re.sub('\D', '', media['episode_number'])	#Because CR puts letters into some rare episode numbers.
 		name = "Episode "+str(media['episode_number']) if media['name'] == '' else media['name'] #CR doesn't seem to include episode names for all media so we have to make one up. 	
+		name = "Coming Soon" if media['available'] is False else name #Set the name for upcoming episodes
 		season = '1' if season == '0' else season #There is a bug which prevents Season 0 from displaying correctly in PMC. This is to help fix that. Will break if a series has both season 0 and 1. 
 		thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwide_url'] #because not all shows have thumbnails.
-		url = media['url']+str('&')+Dict['session_id']
-		
-		if media['available'] is False:
-			description = "This episode will be available on "+str(available_at)
+		thumb = "http://static.ak.crunchyroll.com/i/coming_soon_beta_fwide.jpg" if media['available'] is False else thumb #Sets the thumbnail to coming soon if the episode isn't available yet.
+		description = "This episode will be available on "+str(available_at) if media['available'] is False else media['description'] #Set the description for upcoming episodes.
+		duration = int(0) if media['available'] is False else int((float(media['duration']) * 1000))
+		url = media['url']+str('&')+Dict['session_id'] #Add the session_id to the URL for the URLService
 			
-			oc.add(DirectoryObject(
-				key = Callback(media_unavailable, reason=description),
-				title = str(media['episode_number'])+". "+"Coming Soon",
+		if media['media_type'] in Dict['premium_type'] or media['media_type'] == 'pop':					
+			oc.add(EpisodeObject(
+				url = url,
+				title = name,
 				summary = description,
-				thumb = "http://static.ak.crunchyroll.com/i/coming_soon_beta_fwide.jpg"))
-			
-		elif media['available'] is True:
-			if media['media_type'] in Dict['premium_type'] or media['media_type'] == 'pop':					
-
-				oc.add(EpisodeObject(
-					url = url,
-					title = name,
-					summary = media['description'],
-					originally_available_at = available_date,
-					index = int(media['episode_number']),
-					show = media['series_name'],
-					season = int(season),
-					thumb = thumb,
-					duration = int((float(media['duration']) * 1000))))
-					
-			else:
-				
-				description = "Only available for "+media['media_type']+" premium users. \r\n \r\n"+str(media['description'])
-				reason = "Only available for "+media['media_type']+" premium users."
-				thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwidestar_url'] #because not all shows have thumbnails.
-				
-				oc.add(DirectoryObject(
-					key = Callback(media_unavailable, reason=reason),
-					title = str(media['episode_number'])+". "+str(name),
-					summary = description.decode('utf-8'),
-					thumb = thumb,
-					duration = int((float(media['duration']) * 1000))))
+				originally_available_at = available_date,
+				index = int(media['episode_number']),
+				show = media['series_name'],
+				season = int(season),
+				thumb = thumb,
+				duration = duration
+				)
+			)
 					
 	#Check to see if anything was returned
 	if len(oc) == 0:
 		return ObjectContainer(header='No Results', message='No results were found')
 	
 	return oc
-	
-####################################################################################################
-@route('/video/crunchyroll/media_unavailable')
-def media_unavailable(reason):
-	return ObjectContainer(header = 'Unavailable', message = reason)
 
-####################################################################################################
-@route('/video/crunchyroll/freetrial')
-def FreeTrial():
-  url = "http://www.crunchyroll.com/freetrial/"
-  webbrowser.open(url, new=1, autoraise=True)
-  return ObjectContainer(header="Free Trial Signup", message="A browser has been opened so that you may sign up for a free trial. If you do not have a mouse and keyboard handy, visit http://www.crunchyroll.com and sign up for free today!")
-	
 ####################################################################################################
 def makeAPIRequest(method, options):
 	values = {'session_id':Dict['session_id'], 'version':API_VERSION, 'locale':API_LOCALE} 
