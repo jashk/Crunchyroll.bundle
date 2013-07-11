@@ -56,13 +56,13 @@ A: Not all content on Crunchyroll has HD quality videos available. This plugin w
 
 A: You can choose what type of content to show by changing the Mature Content Filter setting found under "Account Settings" > "Video Preferences" of the http://www.crunchyroll.com website. 
 
-To-do
-====
-- [ ] Change the available_at descriptions to relative datetimes rather than actual datetimes. (E.g. 2 Days rather than 2013-03-05 11:00 PM) 
-- [ ] Add support for Simulcast countdowns 
 
 Changes
 =======
+v2.1.1:
+* Added a countdown to episode release to upcoming episode descriptions. 
+* Changed the object type of upcoming episodes to play nice with Plex Home Theater.
+
 v2.1.0:
 * Added code to the URL Service to allow Plex/Web, Roku, Windows 8, iOS, & many other Plex clients to use the plugin. 
 * Added ClientPlatformExclusions for Chrome & Firefox

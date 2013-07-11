@@ -426,7 +426,8 @@ def list_media_items(request, series_name, art, season, mode):
 		current_datetime = datetime.datetime.now(dateutil.tz.tzutc()) 
 		available_datetime = dateutilparser.parse(media['available_time']).astimezone(dateutil.tz.tzlocal()) 
 		available_date = available_datetime.date() 
-		available_at = available_datetime.strftime('%A, %Y-%m-%d at %I:%M %p') 		
+		available_delta = available_datetime - current_datetime
+		available_in = str(available_delta.days)+" days." if available_delta.days > 0 else str(available_delta.seconds/60/60)+" hours."
 		
 		#Fix Crunchyroll inconsistencies & add details for upcoming or unreleased episodes
 		media['episode_number'] = '0' if media['episode_number'] == '' else media['episode_number'] #PV episodes have no episode number so we set it to 0. 
@@ -436,7 +437,7 @@ def list_media_items(request, series_name, art, season, mode):
 		season = '1' if season == '0' else season #There is a bug which prevents Season 0 from displaying correctly in PMC. This is to help fix that. Will break if a series has both season 0 and 1. 
 		thumb = "http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg" if media['screenshot_image'] is None else media['screenshot_image']['fwide_url'] #because not all shows have thumbnails.
 		thumb = "http://static.ak.crunchyroll.com/i/coming_soon_beta_fwide.jpg" if media['available'] is False else thumb #Sets the thumbnail to coming soon if the episode isn't available yet.
-		description = "This episode will be available on "+str(available_at) if media['available'] is False else media['description'] #Set the description for upcoming episodes.
+		description = "This episode will be available in "+str(available_in) if media['available'] is False else media['description'] #Set the description for upcoming episodes.
 		duration = int(0) if media['available'] is False else int((float(media['duration']) * 1000))
 		url = media['url']+str('&')+Dict['session_id'] #Add the session_id to the URL for the URLService
 			
