@@ -29,7 +29,7 @@ This plugin **requires** a **premium** Crunchyroll.com account. You can sign up 
 
 Installation
 ============
-1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v2.1.2.zip).
+1. Download the latest version of the plugin from [here](https://github.com/MattRK/Crunchyroll.bundle/archive/v2.1.3.zip).
 
 2. Unzip the content into the PMS plugins directory under your user account.
 	* Windows 7, Vista, or Server 2008: C:\Users\[Your Username]\AppData\Local\Plex Media Server\Plug-ins
@@ -59,6 +59,9 @@ A: You can choose what type of content to show by changing the Mature Content Fi
 
 Changes
 =======
+v2.1.3
+* Fixed bug from previous release preventing single season shows from displaying properly
+
 v2.1.2:
 * Fixed bug preventing some shows from displaying seasons properly
 * Added episode counts to each season
