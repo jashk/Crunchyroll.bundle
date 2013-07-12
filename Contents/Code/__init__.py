@@ -375,7 +375,8 @@ def list_collections(series_id, series_name, thumb, art, count):
 	request = makeAPIRequest('list_collections', options)
 	if request['error'] is False:		
 		if len(request['data']) <= 1:
-			return list_media(collection['collection_id'], series_name, art, collection['media_count'], collection['complete'], '1')
+			for collection in request['data']:
+				return list_media(collection['collection_id'], series_name, art, count, collection['complete'], '1')
 		else:
 			for collection in request['data']:
 				oc.add(SeasonObject(
