@@ -370,22 +370,23 @@ def list_categories(title, media_type, filter):
 @route('/video/crunchyroll/collections')
 def list_collections(series_id, series_name, thumb, art, count):
 	oc = ObjectContainer(title2 = series_name, art = art)
-	fields = "collections.collections_id,collections.season,collections.name,collections.portrait_image,collections.large_url"
+	fields = "collection.collection_id,collection.season,collection.name,collection.description,collection.complete,collection.media_count"
 	options = {'series_id':series_id, 'fields':fields, 'sort':'desc', 'limit':count}
 	request = makeAPIRequest('list_collections', options)
 	if request['error'] is False:		
-		for collection in request['data']:
-			if collection['season'] == "0":
-				return list_media(collection['collection_id'], series_name, art, count, collection['complete'], '1')
-			else:
+		if len(request['data']) <= 1:
+			return list_media(collection['collection_id'], series_name, art, collection['media_count'], collection['complete'], '1')
+		else:
+			for collection in request['data']:
 				oc.add(SeasonObject(
-					key = Callback(list_media, collection_id = collection['collection_id'], series_name = series_name, art = art, count = count, complete = collection['complete'], season = collection['season']), 
+					key = Callback(list_media, collection_id = collection['collection_id'], series_name = series_name, art = art, count = collection['media_count'], complete = collection['complete'], season = collection['season']), 
 					rating_key = collection['collection_id'],
 					index = int(collection['season']), 
 					title = collection['name'],
 					summary = collection['description'],
 					show = str(series_name),
-					thumb = thumb))
+					thumb = thumb,
+					episode_count = int(collection['media_count'])))
 				
 				#Check to see if anything was returned
 				if len(oc) == 0:
